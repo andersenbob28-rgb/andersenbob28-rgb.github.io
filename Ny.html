@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Fars Samling</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f5f5f7;
+            margin: 0;
+            padding: 20px;
+            padding-top: calc(20px + env(safe-area-inset-top, 0px));
+            padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 420px;
+            width: 100%;
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #1d1d1f;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-size: 13px;
+            color: #6e6e73;
+            margin-bottom: 4px;
+            margin-top: 10px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #d2d2d7;
+            border-radius: 12px;
+            font-size: 16px;
+        }
+        .type-toggle {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .type-toggle button {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #d2d2d7;
+            background: white;
+            border-radius: 12px;
+            font-size: 15px;
+            cursor: pointer;
+            color: #1d1d1f;
+        }
+        .type-toggle button.active[data-type="DVD"] {
+            background-color: #0071e3;
+            border-color: #0071e3;
+            color: white;
+        }
+        .type-toggle button.active[data-type="Vinyl"] {
+            background-color: #34c759;
+            border-color: #34c759;
+            color: white;
+        }
+        button.primary {
+            width: 100%;
+            padding: 15px;
+            background-color: #0071e3;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+        .search-box {
+            margin-top: 24px;
+            margin-bottom: 10px;
+        }
+        .list {
+            margin-top: 10px;
+        }
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .item:last-child { border-bottom: none; }
+        .item-info { flex: 1; }
+        .item-title { font-size: 16px; color: #1d1d1f; font-weight: 600; }
+        .item-meta { font-size: 13px; color: #86868b; margin-top: 2px; }
+        .badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 8px;
+            margin-right: 6px;
+            color: white;
+        }
+        .badge.DVD { background-color: #0071e3; }
+        .badge.Vinyl { background-color: #34c759; }
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #ff3b30;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 6px 10px;
+        }
+        .empty-state {
+            text-align: center;
+            color: #86868b;
+            padding: 30px 10px;
+            font-size: 15px;
+        }
+        .count {
+            text-align: center;
+            color: #86868b;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .tabs button {
+            flex: 1;
+            padding: 10px 4px;
+            border: none;
+            background: #f0f0f2;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6e6e73;
+            cursor: pointer;
+        }
+        .tabs button.active {
+            background: #1d1d1f;
+            color: white;
+        }
+        .panel { display: none; }
+        .panel.active { display: block; }
+        .tmdb-results {
+            margin-top: 14px;
+        }
+        .tmdb-result {
+            display: flex;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            align-items: center;
+        }
+        .tmdb-result:last-child { border-bottom: none; }
+        .tmdb-poster {
+            width: 46px;
+            height: 69px;
+            object-fit: cover;
+            border-radius: 6px;
+            background: #e8e8ea;
+            flex-shrink: 0;
+        }
+        .tmdb-info { flex: 1; min-width: 0; }
+        .tmdb-title { font-size: 15px; font-weight: 600; color: #1d1d1f; }
+        .tmdb-year { font-size: 13px; color: #86868b; }
+        .add-small-btn {
+            background-color: #0071e3;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 8px 14px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .status-text {
+            text-align: center;
+            color: #86868b;
+            font-size: 14px;
+            padding: 10px 0;
+        }
+        #scanVideo {
+            width: 100%;
+            border-radius: 12px;
+            background: #000;
+            display: block;
+        }
+        .scan-btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .scan-btn-row button {
+            flex: 1;
+            padding: 13px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        #startScanBtn { background-color: #34c759; color: white; }
+        #stopScanBtn { background-color: #ff3b30; color: white; }
+        .hint-text {
+            font-size: 12px;
+            color: #86868b;
+            text-align: center;
+            margin-top: 8px;
+        }
+        .backup-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+        .backup-row button {
+            flex: 1;
+            padding: 11px;
+            border: 1px solid #d2d2d7;
+            background: white;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1d1d1f;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🎬 Fars Samling 🎸</h1>
+
+        <div class="tabs">
+            <button type="button" id="tabTmdbBtn" class="active" onclick="skiftTab('tmdb')">🎬 Film</button>
+            <button type="button" id="tabVinylBtn" onclick="skiftTab('vinyl')">🎸 Vinyl</button>
+            <button type="button" id="tabScanBtn" onclick="skiftTab('scan')">📷 Scan</button>
+            <button type="button" id="tabManuelBtn" onclick="skiftTab('manuel')">✏️ Manuelt</button>
+        </div>
+
+        <div id="panelTmdb" class="panel active">
+            <label for="tmdbSoegefelt">Søg efter en filmtitel</label>
+            <input type="text" id="tmdbSoegefelt" placeholder="F.eks. Bullitt" oninput="tmdbSoegMedForsinkelse()">
+            <div id="tmdbStatus" class="status-text"></div>
+            <div id="tmdbResultater" class="tmdb-results"></div>
+        </div>
+
+        <div id="panelVinyl" class="panel">
+            <label for="vinylSoegefelt">Søg efter kunstner eller albumtitel</label>
+            <input type="text" id="vinylSoegefelt" placeholder="F.eks. Kim Larsen" oninput="vinylSoegMedForsinkelse()">
+            <div id="vinylStatus" class="status-text"></div>
+            <div id="vinylResultater" class="tmdb-results"></div>
+        </div>
+
+        <div id="panelScan" class="panel">
+            <video id="scanVideo" muted playsinline></video>
+            <div class="scan-btn-row">
+                <button type="button" id="startScanBtn" onclick="startScanner()">📷 Start kamera</button>
+                <button type="button" id="stopScanBtn" onclick="stopScanner()" style="display:none;">Stop kamera</button>
+            </div>
+            <div id="scanStatus" class="status-text"></div>
+            <div id="scanResultater" class="tmdb-results"></div>
+            <div class="hint-text">Virker bedst til vinyl og CD'er. Gamle DVD'er mangler ofte i den gratis database — så vis det scannede nummer, og søg titlen manuelt under "Film" i stedet.</div>
+        </div>
+
+        <div id="panelManuel" class="panel">
+            <label for="newTitle">Titel</label>
+            <input type="text" id="newTitle" placeholder="F.eks. Bullitt, eller en vinylplade">
+
+            <label for="newYear">Årstal (valgfrit)</label>
+            <input type="number" id="newYear" placeholder="F.eks. 1968">
+
+            <label>Type</label>
+            <div class="type-toggle">
+                <button type="button" data-type="DVD" onclick="vaelgType('DVD')">🎬 DVD</button>
+                <button type="button" data-type="Vinyl" onclick="vaelgType('Vinyl')">🎸 Vinyl</button>
+            </div>
+
+            <button class="primary" onclick="tilfoej()">Tilføj til samlingen</button>
+        </div>
+
+        <div class="search-box">
+            <label for="soegefelt">Søg i samlingen</label>
+            <input type="text" id="soegefelt" placeholder="Søg på titel..." oninput="visListe()">
+        </div>
+
+        <div class="count" id="antal"></div>
+        <div class="list" id="liste"></div>
+
+        <div class="backup-row">
+            <button type="button" onclick="eksporterSamling()">⬇️ Eksportér</button>
+            <button type="button" onclick="document.getElementById('importFil').click()">⬆️ Importér</button>
+        </div>
+        <input type="file" id="importFil" accept="application/json" style="display:none;" onchange="importerSamling(event)">
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js"></script>
+    <script>
+        // ⚠️ SÆT DIN TMDb API-NØGLE IND HERUNDER (API Key / v3 auth, fra themoviedb.org → Settings → API)
+        const TMDB_API_KEY = 'b3102d91a3692ac1310bab56da10e2fa';
+
+        // ⚠️ SÆT DIN DISCOGS TOKEN IND HERUNDER (Personal Access Token, fra discogs.com/settings/developers)
+        const DISCOGS_TOKEN = 'FfKZAClEWUZbjtEizLnfTEMFkzwXhNLJGbrutLSR';
+
+        let valgtType = 'DVD';
+        let tmdbTimer = null;
+        let vinylTimer = null;
+        let codeReader = null;
+
+        function skiftTab(tab) {
+            ['tmdb', 'vinyl', 'scan', 'manuel'].forEach(t => {
+                document.getElementById('panel' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('active', t === tab);
+                document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1) + 'Btn').classList.toggle('active', t === tab);
+            });
+            if (tab !== 'scan') {
+                stopScanner();
+            }
+        }
+
+        function tmdbSoegMedForsinkelse() {
+            clearTimeout(tmdbTimer);
+            tmdbTimer = setTimeout(tmdbSoeg, 500);
+        }
+
+        async function tmdbSoeg() {
+            const query = document.getElementById('tmdbSoegefelt').value.trim();
+            const statusDiv = document.getElementById('tmdbStatus');
+            const resultDiv = document.getElementById('tmdbResultater');
+
+            if (query === '') {
+                statusDiv.textContent = '';
+                resultDiv.innerHTML = '';
+                return;
+            }
+
+            if (!TMDB_API_KEY || TMDB_API_KEY === 'DIN_API_NØGLE_HER') {
+                statusDiv.textContent = '⚠️ Husk at sætte din TMDb API-nøgle ind i koden først.';
+                resultDiv.innerHTML = '';
+                return;
+            }
+
+            statusDiv.textContent = 'Søger...';
+            resultDiv.innerHTML = '';
+
+            try {
+                const url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&language=da-DK&query=${encodeURIComponent(query)}`;
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Netværksfejl');
+                const data = await response.json();
+
+                if (!data.results || data.results.length === 0) {
+                    statusDiv.textContent = 'Ingen film fundet. Du kan tilføje den manuelt i stedet.';
+                    return;
+                }
+
+                statusDiv.textContent = '';
+                resultDiv.innerHTML = data.results.slice(0, 8).map(film => {
+                    const aar = film.release_date ? film.release_date.substring(0, 4) : '';
+                    const poster = film.poster_path
+                        ? `https://image.tmdb.org/t/p/w92${film.poster_path}`
+                        : '';
+                    return `
+                        <div class="tmdb-result">
+                            ${poster ? `<img class="tmdb-poster" src="${poster}" alt="">` : '<div class="tmdb-poster"></div>'}
+                            <div class="tmdb-info">
+                                <div class="tmdb-title">${escapeHtml(film.title)}</div>
+                                <div class="tmdb-year">${escapeHtml(aar)}</div>
+                            </div>
+                            <button class="add-small-btn" onclick="tilfoejFraTmdb('${escapeHtml(film.title).replace(/'/g, "\\'")}', '${aar}')">Tilføj</button>
+                        </div>
+                    `;
+                }).join('');
+            } catch (e) {
+                statusDiv.textContent = 'Der skete en fejl under søgningen. Prøv igen.';
+            }
+        }
+
+        function tilfoejFraTmdb(titel, aar) {
+            const samling = hentSamling();
+            samling.push({
+                id: Date.now(),
+                titel: titel,
+                aar: aar,
+                type: 'DVD'
+            });
+            gemSamling(samling);
+            document.getElementById('tmdbStatus').textContent = `"${titel}" blev tilføjet til samlingen! ✅`;
+            visListe();
+        }
+
+        function vinylSoegMedForsinkelse() {
+            clearTimeout(vinylTimer);
+            vinylTimer = setTimeout(vinylSoeg, 500);
+        }
+
+        async function vinylSoeg() {
+            const query = document.getElementById('vinylSoegefelt').value.trim();
+            const statusDiv = document.getElementById('vinylStatus');
+            const resultDiv = document.getElementById('vinylResultater');
+
+            if (query === '') {
+                statusDiv.textContent = '';
+                resultDiv.innerHTML = '';
+                return;
+            }
+
+            if (!DISCOGS_TOKEN || DISCOGS_TOKEN === 'DIN_DISCOGS_TOKEN_HER') {
+                statusDiv.textContent = '⚠️ Husk at sætte din Discogs-token ind i koden først.';
+                resultDiv.innerHTML = '';
+                return;
+            }
+
+            statusDiv.textContent = 'Søger...';
+            resultDiv.innerHTML = '';
+
+            try {
+                const url = `https://api.discogs.com/database/search?q=${encodeURIComponent(query)}&type=release&format=Vinyl&token=${DISCOGS_TOKEN}`;
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Netværksfejl');
+                const data = await response.json();
+                visVinylResultater(data.results, statusDiv, resultDiv);
+            } catch (e) {
+                statusDiv.textContent = 'Der skete en fejl under søgningen. Prøv igen, eller tilføj manuelt.';
+            }
+        }
+
+        function visVinylResultater(resultater, statusDiv, resultDiv) {
+            if (!resultater || resultater.length === 0) {
+                statusDiv.textContent = 'Ingen plader fundet. Du kan tilføje den manuelt i stedet.';
+                return;
+            }
+
+            statusDiv.textContent = '';
+            resultDiv.innerHTML = resultater.slice(0, 8).map(plade => {
+                const aar = plade.year || '';
+                const billede = plade.thumb || '';
+                const titel = plade.title || 'Ukendt';
+                return `
+                    <div class="tmdb-result">
+                        ${billede ? `<img class="tmdb-poster" src="${billede}" alt="">` : '<div class="tmdb-poster"></div>'}
+                        <div class="tmdb-info">
+                            <div class="tmdb-title">${escapeHtml(titel)}</div>
+                            <div class="tmdb-year">${escapeHtml(String(aar))}</div>
+                        </div>
+                        <button class="add-small-btn" onclick="tilfoejFraVinyl('${escapeHtml(titel).replace(/'/g, "\\'")}', '${aar}')">Tilføj</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function tilfoejFraVinyl(titel, aar) {
+            const samling = hentSamling();
+            samling.push({
+                id: Date.now(),
+                titel: titel,
+                aar: aar,
+                type: 'Vinyl'
+            });
+            gemSamling(samling);
+            document.getElementById('vinylStatus').textContent = `"${titel}" blev tilføjet til samlingen! ✅`;
+            visListe();
+        }
+
+        function startScanner() {
+            const statusDiv = document.getElementById('scanStatus');
+            document.getElementById('scanResultater').innerHTML = '';
+
+            if (typeof ZXing === 'undefined') {
+                statusDiv.textContent = 'Scanneren kunne ikke indlæses. Tjek din internetforbindelse.';
+                return;
+            }
+
+            codeReader = new ZXing.BrowserMultiFormatReader();
+            statusDiv.textContent = 'Åbner kamera... (sig ja til tilladelsen)';
+            document.getElementById('startScanBtn').style.display = 'none';
+            document.getElementById('stopScanBtn').style.display = 'block';
+
+            codeReader.decodeFromVideoDevice(undefined, 'scanVideo', (result, err) => {
+                if (result) {
+                    haandterStregkode(result.getText());
+                }
+            }).then(() => {
+                statusDiv.textContent = 'Peg kameraet mod stregkoden på bagsiden.';
+            }).catch(() => {
+                statusDiv.textContent = 'Kunne ikke få adgang til kameraet. Tjek at du har givet tilladelse i browseren.';
+                stopScanner();
+            });
+        }
+
+        function stopScanner() {
+            if (codeReader) {
+                codeReader.reset();
+                codeReader = null;
+            }
+            document.getElementById('startScanBtn').style.display = 'block';
+            document.getElementById('stopScanBtn').style.display = 'none';
+        }
+
+        async function haandterStregkode(stregkode) {
+            stopScanner();
+            const statusDiv = document.getElementById('scanStatus');
+            const resultDiv = document.getElementById('scanResultater');
+            statusDiv.textContent = `Fundet: ${stregkode} — slår op...`;
+            resultDiv.innerHTML = '';
+
+            if (!DISCOGS_TOKEN || DISCOGS_TOKEN === 'DIN_DISCOGS_TOKEN_HER') {
+                statusDiv.textContent = `Stregkode ${stregkode} fundet, men Discogs-token mangler i koden.`;
+                return;
+            }
+
+            try {
+                const url = `https://api.discogs.com/database/search?barcode=${encodeURIComponent(stregkode)}&token=${DISCOGS_TOKEN}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.results && data.results.length > 0) {
+                    statusDiv.textContent = `Fundet via stregkode ${stregkode}:`;
+                    visVinylResultater(data.results, statusDiv, resultDiv);
+                } else {
+                    statusDiv.textContent = `Ingen vinyl/CD fundet med stregkode ${stregkode}. Hvis det er en DVD, så søg titlen manuelt under fanen "Film" i stedet — stregkoden ${stregkode} kan være nyttig at google.`;
+                }
+            } catch (e) {
+                statusDiv.textContent = `Stregkode ${stregkode} fundet, men opslaget fejlede. Søg titlen manuelt i stedet.`;
+            }
+        }
+
+        function vaelgType(type) {
+            valgtType = type;
+            document.querySelectorAll('.type-toggle button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.type === type);
+            });
+        }
+        vaelgType('DVD');
+
+        function hentSamling() {
+            try {
+                const data = localStorage.getItem('farsSamling');
+                return data ? JSON.parse(data) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function gemSamling(samling) {
+            localStorage.setItem('farsSamling', JSON.stringify(samling));
+        }
+
+        function tilfoej() {
+            const titelFelt = document.getElementById('newTitle');
+            const aarFelt = document.getElementById('newYear');
+            const titel = titelFelt.value.trim();
+            const aar = aarFelt.value.trim();
+
+            if (titel === '') {
+                alert('Skriv venligst en titel først!');
+                return;
+            }
+
+            const samling = hentSamling();
+            samling.push({
+                id: Date.now(),
+                titel: titel,
+                aar: aar,
+                type: valgtType
+            });
+            gemSamling(samling);
+
+            titelFelt.value = '';
+            aarFelt.value = '';
+            titelFelt.focus();
+
+            visListe();
+        }
+
+        function slet(id) {
+            let samling = hentSamling();
+            samling = samling.filter(item => item.id !== id);
+            gemSamling(samling);
+            visListe();
+        }
+
+        function visListe() {
+            const soegning = document.getElementById('soegefelt').value.trim().toLowerCase();
+            const samling = hentSamling();
+
+            const filtreret = samling
+                .filter(item => item.titel.toLowerCase().includes(soegning))
+                .sort((a, b) => a.titel.localeCompare(b.titel, 'da'));
+
+            const listeDiv = document.getElementById('liste');
+            const antalDiv = document.getElementById('antal');
+
+            antalDiv.textContent = samling.length === 0
+                ? ''
+                : `${samling.length} ting i samlingen`;
+
+            if (filtreret.length === 0) {
+                listeDiv.innerHTML = samling.length === 0
+                    ? '<div class="empty-state">Samlingen er tom endnu.<br>Tilføj din første DVD eller vinylplade ovenfor!</div>'
+                    : '<div class="empty-state">Ingen fund på den søgning.</div>';
+                return;
+            }
+
+            listeDiv.innerHTML = filtreret.map(item => `
+                <div class="item">
+                    <div class="item-info">
+                        <div class="item-title">${escapeHtml(item.titel)}</div>
+                        <div class="item-meta">
+                            <span class="badge ${item.type}">${item.type}</span>
+                            ${item.aar ? escapeHtml(item.aar) : ''}
+                        </div>
+                    </div>
+                    <button class="delete-btn" onclick="slet(${item.id})" aria-label="Slet">🗑️</button>
+                </div>
+            `).join('');
+        }
+
+        function eksporterSamling() {
+            const samling = hentSamling();
+            if (samling.length === 0) {
+                alert('Samlingen er tom, der er ikke noget at eksportere endnu.');
+                return;
+            }
+            const blob = new Blob([JSON.stringify(samling, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const dato = new Date().toISOString().substring(0, 10);
+            a.href = url;
+            a.download = `fars-samling-${dato}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function importerSamling(event) {
+            const fil = event.target.files[0];
+            if (!fil) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importeret = JSON.parse(e.target.result);
+                    if (!Array.isArray(importeret)) throw new Error('Forkert format');
+
+                    const eksisterende = hentSamling();
+                    const eksisterendeIds = new Set(eksisterende.map(i => i.id));
+                    let tilfoejet = 0;
+
+                    importeret.forEach(item => {
+                        if (item && item.titel && !eksisterendeIds.has(item.id)) {
+                            eksisterende.push({
+                                id: item.id || Date.now() + Math.random(),
+                                titel: item.titel,
+                                aar: item.aar || '',
+                                type: item.type === 'Vinyl' ? 'Vinyl' : 'DVD'
+                            });
+                            tilfoejet++;
+                        }
+                    });
+
+                    gemSamling(eksisterende);
+                    visListe();
+                    alert(`${tilfoejet} ting blev importeret til samlingen!`);
+                } catch (err) {
+                    alert('Filen kunne ikke læses. Sørg for, at det er en fil eksporteret fra denne app.');
+                }
+                event.target.value = '';
+            };
+            reader.readAsText(fil);
+        }
+
+        function escapeHtml(tekst) {
+            const div = document.createElement('div');
+            div.textContent = tekst;
+            return div.innerHTML;
+        }
+
+        visListe();
+    </script>
+
+</body>
+</html>
