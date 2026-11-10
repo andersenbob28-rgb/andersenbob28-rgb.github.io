@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Fars Samling</title>
+
+    <!-- Gør den til en "app" med eget ikon, når man tilføjer den til hjemmeskærmen -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Fars Samling">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAJEklEQVR4nO3caWwU5x3H8Wd2d2Z2vYdvr40BY8dgzOkUAoSrOAWcNC1KlIS2pArpoQjRpmnUgqoKKaiRUrWRUFslgRaSVmkoElFQS1JKCBVHwWCnIMxhjA3YMQbfBu96j7l2+iK8iCh/76z3mF3n9xFvMMPsY/u7s8/MPrMze/kGA7gfi9kDgPSFOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOIBkM3sAGc8lckvKxZoJfLWXL8+zet3WAqfFwXOijdN0PaTc/ROU9R5/5Nawdsun3RzWuu5oLX1qW7+iRsz+Bmjmx9Hyi+KqolQP499t0srt/fHsocBp+faDWd960LGoTLQRx18r4wQrl22/+9eZxfduoGh624Da3KNe7FEaPpMbPpNvh9IoFvPjyDil2dYtqzzrH8py8Fycu+Kt3AwvP8PLPz3XwRjTddbSp5zqkPdfCv/jYigRg40L4ogBx7GfrXBvrfM4hXizoPZf7eWrvXxZng1xZJIch2Xv+rxV0+zRNx0vEIchhS7LJxsK507gzR5ISuFUNjq7jdv/g4IvWxkMcRjx+prsRWWC2aMwAeKIYmGZsHGJy+xRmANxRPGrRz2WpJyaZABMSEczw8uvrorh9OROKPLxlfCRNulKv9oxpA2HIkFFVyO63ca5RYvXbSnNtlYV2aYX8fMm8bNLeMGa1t0hjtGsm+cwuGVY1bcc8O2oHwnI+v//a0DWA7LW49eabikHLt/9omjjllUIdVX2uun22SXpONvNpDgu9SizftubykesM3bYCCn6V9/s/7RTjmnnkqofbpUOt0qbPhwu8VifmOV4fkHWgslpNPPNpDhSLEvgakoN/apePeSLtYx7dPu07fUj2+tHqr389xZkFbut8ewtURAHqbLARr2jdo8/NwYT9aCXe5XNHw4nam9xwtkKaUquoWeOLxzp8WvJHowpEAcp22HoVCJynwnoOIE4SHaboThyHJbyvPH56ow4SH7J6DFh8yPupI7ELIiDNBAwOpPYsNj5Sp3HOu5+luPuG0qcgUAMK/a21nmafu794SKnxz5+fqTj88UyIVp6VUnVRWMzD8bYzGJ+59rcN5/KOXZNOtImnWiXz3TJwftdMM0UiIMUVvVTHfKKSjGm/yVYuVXT7J8vGFMj7GK30tgpN3TKjZ1yc4+SWac2mRTHzGJe3zYx/v3UvtV/9KpkZMvDrVKscXyRzcJqSvmaUv6Fh52MsRFJ//SGXN8h/ee6fPyaFFLSvZRMiiP13m4IbFntNnhOG5VL5GorxdpKkTEmqfqxa9K+86F9F0L9I2l0O8IXjZ/ZUzL0+LVdpwPJ2LNo41ZX2Xc8k3vzlZK96/OXVYz9+JQ8iCOK1w77k/rM5q3cM3Mdx39ceOxHhfMnpdFbsgxxRNXt09a+O5iCmxaXPyA2/rToD0/mJOpVLH6II7qjV6UX993Wkz995Dj24jLXiZ8Upslb9ojDkB31gWd3D913lVfCzZsoHNpQkKSb6mKCOIzaczY4f1vvyfa4FvUYNLuE/8t38lLwQKNDHDFo6VOXvdG37r2hK31qsh/r6bmO5+ZnJftRRoc4YqPrbM/Z4Izf9Hxz18A/m8NJnaj+cqXJd0XgIthYRHT2UXP4o+ZwgdOyZpbj8Wp77VQx15HgZ1pVke2pOY73m0y73T6T4kj96vOoBgKRdxoC7zQEOI7NKuaXlotLK4Sl5eLk3MScbjw5G3FkPl1nF7qVC93K9nrGGJuUY11aIS4tF2orxWrv2O9JieednfghjqS4cUfbcza452yQMVbisX692r62xvG1qfZYFwSVeKxTC21t/Umf/94XJqRJ1+3T3m4I1P1xYNqve3aeDsR6Mc3gIvhkQBypc31QfWHv7W/sGpC1GALJd5r2O0IcqXbgcnjLAZ/x7fOyEMeXyRsnRsKq0YNH/J9ZOGaIwwQhRT/bpRjfOKmDGQXiMMeg4aXtfsm0dWKIYzR//37+ymlJudJQYHia2XXHtBtxEcdoFpUJn2woPLKxMLEfP+oSuTmGP5uwfci0OHARLLoVleKKSvHcTWXbMf/750LG55KUjUtcBpdrDAUjHUPmXAFjOHIYV1PKv7su7+bWkt89kfOViWO/Il433f7qYx6DG5/qSMXyEQqOHLHJy7K8tNz10nLX9UH1g/OhQ1fCJ9tlgycUuQ7L5kfcm2rdxi+i779k5iegI44xqsi3bap1b6p1S6p+pks5d1NuuqW0D2qdd9SBQCQo65KqZwmcW7SU51lnFvOrq+yPTre7xBguWkiqvu884shkoo1bPEVYPCXxdxX89b/BmG7mTjjMOdJUSNFfO+w3dwyII01t/djXbt55yucQRzrafyn0+hGTDxsMcaSho1elZ98bSsE9VFEhjvSy+0zwsT8NjBj+OLKkQhyjeX7P7Z2nA92+VFzA7vVrz/1t6Lu7h+K/ApsoOJUdzcGW8MGWMMexhyYJa2bZH692zJnAJ/xekm6f9tbJwO+P+41/fmFqII7odJ01dsqNnfKWAz63yC0sExaViQ9PERZOFuJZw9c3EjnYEv6gKfSvlrASy8LBlOHYyzfMHkMGm+CxVuTbKvKtDxTYKvJtk3OsHrvFKXBOkXMJnFOwMMZkTQ+r+mAg0j8S6RrWWvuVll61sVNuNWlNuXGIA0iYkAIJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQAJcQDpf4b7tE1/LRj9AAAAAElFTkSuQmCC">
     <style>
         * { box-sizing: border-box; }
         body {
@@ -97,9 +103,17 @@
             border-bottom: 1px solid #f0f0f0;
         }
         .item:last-child { border-bottom: none; }
-        .item-info { flex: 1; }
+        .item-info { flex: 1; min-width: 0; }
         .item-title { font-size: 16px; color: #1d1d1f; font-weight: 600; }
         .item-meta { font-size: 13px; color: #86868b; margin-top: 2px; }
+        .item-cover {
+            width: 40px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+            background: #e8e8ea;
+            flex-shrink: 0;
+        }
         .badge {
             display: inline-block;
             font-size: 11px;
@@ -309,10 +323,10 @@
     <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js"></script>
     <script>
         // ⚠️ SÆT DIN TMDb API-NØGLE IND HERUNDER (API Key / v3 auth, fra themoviedb.org → Settings → API)
-        const TMDB_API_KEY = 'b3102d91a3692ac1310bab56da10e2fa';
+        const TMDB_API_KEY = 'DIN_API_NØGLE_HER';
 
         // ⚠️ SÆT DIN DISCOGS TOKEN IND HERUNDER (Personal Access Token, fra discogs.com/settings/developers)
-        const DISCOGS_TOKEN = 'FfKZAClEWUZbjtEizLnfTEMFkzwXhNLJGbrutLSR';
+        const DISCOGS_TOKEN = 'DIN_DISCOGS_TOKEN_HER';
 
         let valgtType = 'DVD';
         let tmdbTimer = null;
@@ -378,7 +392,7 @@
                                 <div class="tmdb-title">${escapeHtml(film.title)}</div>
                                 <div class="tmdb-year">${escapeHtml(aar)}</div>
                             </div>
-                            <button class="add-small-btn" onclick="tilfoejFraTmdb('${escapeHtml(film.title).replace(/'/g, "\\'")}', '${aar}')">Tilføj</button>
+                            <button class="add-small-btn" onclick="tilfoejFraTmdb('${escapeHtml(film.title).replace(/'/g, "\\'")}', '${aar}', '${poster.replace(/'/g, "\\'")}')">Tilføj</button>
                         </div>
                     `;
                 }).join('');
@@ -387,13 +401,14 @@
             }
         }
 
-        function tilfoejFraTmdb(titel, aar) {
+        function tilfoejFraTmdb(titel, aar, billede) {
             const samling = hentSamling();
             samling.push({
                 id: Date.now(),
                 titel: titel,
                 aar: aar,
-                type: 'DVD'
+                type: 'DVD',
+                billede: billede || ''
             });
             gemSamling(samling);
             document.getElementById('tmdbStatus').textContent = `"${titel}" blev tilføjet til samlingen! ✅`;
@@ -454,19 +469,20 @@
                             <div class="tmdb-title">${escapeHtml(titel)}</div>
                             <div class="tmdb-year">${escapeHtml(String(aar))}</div>
                         </div>
-                        <button class="add-small-btn" onclick="tilfoejFraVinyl('${escapeHtml(titel).replace(/'/g, "\\'")}', '${aar}')">Tilføj</button>
+                        <button class="add-small-btn" onclick="tilfoejFraVinyl('${escapeHtml(titel).replace(/'/g, "\\'")}', '${aar}', '${billede.replace(/'/g, "\\'")}')">Tilføj</button>
                     </div>
                 `;
             }).join('');
         }
 
-        function tilfoejFraVinyl(titel, aar) {
+        function tilfoejFraVinyl(titel, aar, billede) {
             const samling = hentSamling();
             samling.push({
                 id: Date.now(),
                 titel: titel,
                 aar: aar,
-                type: 'Vinyl'
+                type: 'Vinyl',
+                billede: billede || ''
             });
             gemSamling(samling);
             document.getElementById('vinylStatus').textContent = `"${titel}" blev tilføjet til samlingen! ✅`;
@@ -615,11 +631,14 @@
 
             listeDiv.innerHTML = filtreret.map(item => `
                 <div class="item">
+                    ${item.billede
+                        ? `<img class="item-cover" src="${item.billede}" alt="">`
+                        : '<div class="item-cover"></div>'}
                     <div class="item-info">
                         <div class="item-title">${escapeHtml(item.titel)}</div>
                         <div class="item-meta">
                             <span class="badge ${item.type}">${item.type}</span>
-                            ${item.aar ? escapeHtml(item.aar) : ''}
+                            ${item.aar ? escapeHtml(String(item.aar)) : ''}
                         </div>
                     </div>
                     <button class="delete-btn" onclick="slet(${item.id})" aria-label="Slet">🗑️</button>
